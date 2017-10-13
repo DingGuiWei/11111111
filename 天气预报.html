@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box1{
+            width: 1000px;
+            background-image: url("aa.jpg");
+            margin: 100px auto;
+            height: 300px;
+
+        }
+        .box{
+            width: 400px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        h1{
+            text-align: center;
+            width: 400px;
+            margin: 0 auto;
+
+        }
+        ul{
+            width: 300px;
+
+            list-style: none;
+            display: none;
+        }
+        li{
+            color: #ffffcc;
+            margin-left: 50px;
+        }
+        input{
+            width: 300px;
+            height: 30px;
+        }
+        button{
+            height: 32px;
+            width: 50px;
+        }
+        li:hover{
+            cursor: pointer;
+            color: red;
+
+        }
+    </style>
+</head>
+<body>
+<div class="box1">
+    <h1>查询今日天气</h1>
+    <div class="box">
+        <input type="text"/><button>查询</button>
+        <ul>
+        </ul>
+    </div>
+</div>
+
+
+
+</body>
+<script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.js"></script>
+<script>
+    $(function(){
+        $('button').on('click',function () {
+            var text = $('input').val();
+            $.ajax({
+                url:'http://v.juhe.cn/weather/index?',
+                type:'get',
+                data:{
+                    cityname:text,                          //城市名
+                    key:'613275ddb58ebb63053620265d8d760b'  //我自己申请的数据
+                },
+                dataType:'jsonp',                           //设置返回数据类型
+                jsonp:'callback',                            //加入一个聚合网的默认名函数名？跟那个百度数据cb一样
+                success: function (data) {             //接受数据成功后执行的函数
+                    if(data.resultcode==='200'){
+                        //当天天气
+                        var  srt=' <li>城市：'+data.result.today.city+'</li>';
+                        srt+='<li>日期：'+data.result.today.date_y+'</li>';
+                        srt+='<li>温度：'+data.result.today.temperature+'</li>';
+                        srt+='<li>天气：'+data.result.today.weather+'</li>';
+                        srt+='<li>湿度：'+data.result.sk.humidity+'</li>';
+                        srt+='<li>风向：'+data.result.today.wind+'</li>';
+                        srt+='<li>风力：'+data.result.sk.wind_strength+'</li>';
+                        //未来天气
+                        
+//                        for(var i=0 ;i<6;i++){         //遍历每一个星期天 其中json访问的方式有两种一种是
+//                           // 点的方式访问固定值一种是[]是变量形式的访问记住[]中要加入引号
+//
+//
+//                                var sss='day_201710'+(i+6);
+//                                srt+=' <li>日期： '+data.result.future[sss].date+'</li>';
+//                                srt+=' <li>温度：'+data.result.future[sss].temperature+'</li>';
+//                                srt+=' <li>天气：'+data.result.future[sss].weather+'</li>';
+//
+//
+//                        }
+console.log(data)
+
+
+
+
+                        $('ul').html(srt);
+                        $('ul').slideDown(1000)
+                    }else{
+                        $('ul').html('<h1>您所查询的城市暂时不支持</h1>')
+                    }
+
+
+
+
+
+
+
+
+                },
+                error:function(){
+
+                }
+            })
+        })
+
+    })
+</script>
+</html>
+
+
+
+
+
+
+
+
